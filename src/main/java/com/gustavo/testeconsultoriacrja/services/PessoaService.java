@@ -41,14 +41,15 @@ public class PessoaService {
 
         if(pessoaDTO.getDepartamento() != null){
             Optional<Departamento> departamento = departamentoRepository.findById(pessoaDTO.getDepartamento());
+            validaObjeto(departamento.get());
             pessoaOld.get().setDepartamento(departamento.get());
         }
-        
         
         return repository.save(pessoaOld.get());
     }
 
     public void delete(Integer id){
+        findById(id);
         repository.deleteById(id);
     }
 
@@ -88,6 +89,7 @@ public class PessoaService {
                             pessoa.setId(pessoas.get(i).getId());
                             pessoa.setNome(pessoas.get(i).getNome());
                             Optional<Departamento> departamento = departamentoRepository.findById(pessoas.get(i).getDepartamento().getId());
+                            validaObjeto(departamento.get());
                             pessoa.setDepartamento(departamento.get().getId());
                             pessoa.setHorasGastas(pessoas.get(i).getNome() +" tem o total de "+listaTarefas.get(t).getDuracao() + " horas gastas na tarefa "+ listaTarefas.get(t).getId());
                             pessoaComHorasGastas.add(pessoa);
@@ -99,7 +101,11 @@ public class PessoaService {
         }
 
         return pessoaComHorasGastas;
-     
     }
 
+     private void validaObjeto(Departamento departamento) {
+        if(departamento == null){
+            throw new ObjectNotFoundException("Pessoa não encontrado na base de dados!");
+           }
+    }
 }

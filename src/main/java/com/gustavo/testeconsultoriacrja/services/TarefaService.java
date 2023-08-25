@@ -1,9 +1,12 @@
 package com.gustavo.testeconsultoriacrja.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +79,8 @@ public class TarefaService {
                 }
             }
         }
+
+        Collections.sort(tarefasSemPessoa, Comparator.comparing(TarefaDTO::getPrazo));
         return tarefasSemPessoa;
     }
 
