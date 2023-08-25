@@ -2,12 +2,12 @@ package com.gustavo.testeconsultoriacrja.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gustavo.testeconsultoriacrja.dtos.DepartamentoDTO;
+import com.gustavo.testeconsultoriacrja.dtos.DepartamentoTotalDTO;
 import com.gustavo.testeconsultoriacrja.models.Departamento;
 import com.gustavo.testeconsultoriacrja.models.Pessoa;
 import com.gustavo.testeconsultoriacrja.models.Tarefa;
@@ -27,29 +27,19 @@ public class DepartamentoService {
     @Autowired
     public PessoaRepository pessoaRepository;
 
-    public Departamento create(Departamento departamento){
+    public Departamento create(DepartamentoDTO dto){
+        Departamento departamento =new Departamento();
+        departamento.setNome(dto.getNome());
         return repository.save(departamento);
     }
 
-    public List<Departamento> listarDepartamento() {
-        return null;
-    }
-
-    public Departamento findById(Integer id) {
-        Optional<Departamento> depOptional = repository.findById(id);
-        return depOptional.get();
-    }
-
-    public List<DepartamentoDTO> findAllTotal(){
+    public List<DepartamentoTotalDTO> findAllTotal(){
         List<Departamento> listDepartamentos = repository.findAll();
         List<Tarefa> listTarefas = tarefaRepository.findAll();
         List<Pessoa> listPessoas = pessoaRepository.findAll();
-        List<DepartamentoDTO> departamentoTotal = new ArrayList<>();
-        
+        List<DepartamentoTotalDTO> departamentoTotal = new ArrayList<>();
         int totalPessoas = 0;
         int totalTarefas = 0;
-
-        
 
         for(int d = 0; d < listDepartamentos.size(); d++){
         
@@ -65,7 +55,7 @@ public class DepartamentoService {
                 }
             }
         
-                DepartamentoDTO departamentoDTO = new DepartamentoDTO();
+                DepartamentoTotalDTO departamentoDTO = new DepartamentoTotalDTO();
                 departamentoDTO.setNome(listDepartamentos.get(d).getNome());
                 departamentoDTO.setQuantidadePessoas(totalPessoas);
                 departamentoDTO.setQuantidadeTarefa(totalTarefas);

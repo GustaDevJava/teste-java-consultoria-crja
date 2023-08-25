@@ -27,7 +27,7 @@ public class TarefaController {
     @Autowired
     private TarefaService service;
 
-    @PostMapping(value = "/post/tarefas")
+    @PostMapping(value = "/tarefas")
     public ResponseEntity<TarefaDTO> create(@Valid @RequestBody TarefaDTO tarefaDTO){
         Tarefa novaTarefa = service.create(tarefaDTO);
 
@@ -38,21 +38,21 @@ public class TarefaController {
 
     }
 
-    @PutMapping(value = "put/tarefas/alocar/{id}")
+    @PutMapping(value = "tarefas/alocar/{id}")
     public ResponseEntity<Tarefa> alocarPessoa(@RequestBody TarefaDTO dto, @PathVariable Integer id){
         Tarefa tarefa = service.addPessoa(id, dto);
 
         return ResponseEntity.ok().body(tarefa);
     }
 
-    @PutMapping(value = "put/tarefas/finalizar/{id}")
+    @PutMapping(value = "tarefas/finalizar/{id}")
     public ResponseEntity<Tarefa> finalizaTarefa(@PathVariable Integer id){
         Tarefa tarefa = service.finalizarTarefa(id);
 
         return ResponseEntity.ok().body(tarefa);
     } 
 
-    @GetMapping(value = "get/tarefas/pendentes")
+    @GetMapping(value = "tarefas/pendentes")
     public ResponseEntity<List<TarefaDTO>> buscarTarefaSemPessoa(){
         List<TarefaDTO> listaTarefas = service.tarefasSemPessoa();
 

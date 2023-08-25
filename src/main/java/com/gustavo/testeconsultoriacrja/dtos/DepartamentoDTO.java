@@ -7,16 +7,22 @@ import com.gustavo.testeconsultoriacrja.models.Departamento;
 public class DepartamentoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private Integer id;
     private String nome;
-    private int quantidadePessoas;
-    private int quantidadeTarefa;
 
     public DepartamentoDTO(){}
 
-    public DepartamentoDTO(Departamento departamento, int quantidadePessoas, int quantidadeTarefa) {
+    public DepartamentoDTO(Departamento departamento) {
+        this.id = departamento.getId();
         this.nome = departamento.getNome();
-        this.quantidadePessoas = quantidadePessoas;
-        this.quantidadeTarefa = quantidadeTarefa;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -25,22 +31,6 @@ public class DepartamentoDTO implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public int getQuantidadePessoas() {
-        return quantidadePessoas;
-    }
-
-    public void setQuantidadePessoas(int quantidadePessoas) {
-        this.quantidadePessoas = quantidadePessoas;
-    }
-
-    public int getQuantidadeTarefa() {
-        return quantidadeTarefa;
-    }
-
-    public void setQuantidadeTarefa(int quantidadeTarefa) {
-        this.quantidadeTarefa = quantidadeTarefa;
     }
 
     

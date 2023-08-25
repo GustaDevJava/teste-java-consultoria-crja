@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.gustavo.testeconsultoriacrja.dtos.PessoaDTO;
 import com.gustavo.testeconsultoriacrja.dtos.PessoaHorasGastasDTO;
+import com.gustavo.testeconsultoriacrja.dtos.PessoaMediaHorasDTO;
+import com.gustavo.testeconsultoriacrja.dtos.requests.PessoaRequestDTO;
 import com.gustavo.testeconsultoriacrja.exceptions.ObjectNotFoundException;
 import com.gustavo.testeconsultoriacrja.models.Departamento;
 import com.gustavo.testeconsultoriacrja.models.Pessoa;
@@ -62,17 +64,6 @@ public class PessoaService {
         }
 
     }
-    
-
-    private Pessoa populaPessoa(PessoaDTO pessoaDTO) {
-        Pessoa pessoa = new Pessoa();
-
-        pessoa.setNome(pessoaDTO.getNome());
-        Optional<Departamento> departamento = departamentoRepository.findById(pessoaDTO.getDepartamento());
-        pessoa.setDepartamento(departamento.get());
-
-        return pessoa;
-    }
 
     public List<PessoaHorasGastasDTO> buscarPessoas(){
         List<Pessoa> pessoas = repository.findAll();
@@ -103,9 +94,45 @@ public class PessoaService {
         return pessoaComHorasGastas;
     }
 
+    public PessoaMediaHorasDTO mediaHoras(PessoaRequestDTO requestDTO){
+        List<Pessoa> listPessoas = repository.findAll();
+        List<Tarefa> listaTarefa = tarefaRepository.findAll();
+        PessoaMediaHorasDTO mediaPessoa = new PessoaMediaHorasDTO();
+        int media = 0;
+        int duracao = 0;
+
+        if(requestDTO.getNome() != null){
+            for(Pessoa p : listPessoas){
+            if(requestDTO.getNome().equalsIgnoreCase(p.getNome())){
+                for(int i = 0; i < listaTarefa.size(); i++){
+                    if(listaTarefa.get(i).getPessoa() != null && p.getId() == listaTarefa.get(i).getPessoa().getId()){
+                        media++;
+                        duracao = listaTarefa.get(i).getDuracao();
+                    }
+                }
+            }
+        }
+
+        int resultado = duracao/media;
+        mediaPessoa.setMedia("A media de horas gastas é de " + resultado + " horas");
+        }
+        
+        return mediaPessoa;
+    }
+
      private void validaObjeto(Departamento departamento) {
         if(departamento == null){
             throw new ObjectNotFoundException("Pessoa não encontrado na base de dados!");
            }
+    }
+
+     private Pessoa populaPessoa(PessoaDTO pessoaDTO) {
+        Pessoa pessoa = new Pessoa();
+
+        pessoa.setNome(pessoaDTO.getNome());
+        Optional<Departamento> departamento = departamentoRepository.findById(pessoaDTO.getDepartamento());
+        pessoa.setDepartamento(departamento.get());
+
+        return pessoa;
     }
 }

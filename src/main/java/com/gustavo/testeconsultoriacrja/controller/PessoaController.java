@@ -17,6 +17,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.gustavo.testeconsultoriacrja.dtos.PessoaDTO;
 import com.gustavo.testeconsultoriacrja.dtos.PessoaHorasGastasDTO;
+import com.gustavo.testeconsultoriacrja.dtos.PessoaMediaHorasDTO;
+import com.gustavo.testeconsultoriacrja.dtos.requests.PessoaRequestDTO;
 import com.gustavo.testeconsultoriacrja.models.Pessoa;
 import com.gustavo.testeconsultoriacrja.services.PessoaService;
 
@@ -29,7 +31,7 @@ public class PessoaController {
     @Autowired
     private PessoaService service;
 
-    @PostMapping(value = "post/pessoas")
+    @PostMapping(value = "pessoas")
     public ResponseEntity<Pessoa> create(@Valid @RequestBody PessoaDTO pessoaDTO){
         Pessoa novaPessoa = service.create(pessoaDTO);
 
@@ -39,23 +41,30 @@ public class PessoaController {
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping(value = "put/pessoas/{id}")
+    @PutMapping(value = "pessoas/{id}")
     public ResponseEntity<Pessoa> update(@RequestBody PessoaDTO pessoaDTO, @PathVariable Integer id){
         Pessoa updatePessoa = service.update(id, pessoaDTO);
 
         return ResponseEntity.ok().body(updatePessoa);
     }
 
-    @DeleteMapping(value = "delete/pessoas/{id}")
+    @DeleteMapping(value = "pessoas/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id){
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "get/pessoas")
+    @GetMapping(value = "pessoas")
     public ResponseEntity<List<PessoaHorasGastasDTO>> buscarPessoas(){
         List<PessoaHorasGastasDTO> buscPessoas = service.buscarPessoas();
 
         return ResponseEntity.ok().body(buscPessoas);
+    }
+
+    @GetMapping(value = "pessoas/gastos")
+    public ResponseEntity<PessoaMediaHorasDTO> mediaHorasGastas(@RequestBody PessoaRequestDTO dto){
+        PessoaMediaHorasDTO mediaHorasDTO = service.mediaHoras(dto);
+
+        return ResponseEntity.ok().body(mediaHorasDTO);
     }
 }
